@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+<h1>114306020_HW7_1A2B</h1>
+
+
+Enter 4 unique numbers
+
+
+<input id="guess" type="text" maxlength="4" placeholder="" />
+<button onclick="play()">Guess!</button>
+
+
+<h3>Game Record：</h3>
+<div id="record"></div>
+
+
+<script>
+
+var answer = "";
+var tries = 0;
+generateAnswer();
+
+
+// ====== 產生不重複四位數（不用 array method） ======
+function generateAnswer() {
+var digits = []; // 存 4 個數字
+
+
+while (digits.length < 4) {
+var n = Math.floor(Math.random() * 10); // 0~9
+
+
+// 用最基本 for 迴圈檢查是否重複
+var repeat = false;
+for (var i = 0; i < digits.length; i++) {
+if (digits[i] === n) {
+repeat = true;
+break;
+}
+}
+
+
+if (repeat === false) {
+digits.push(n); // 只用 push，最基本
+}
+}
+
+
+answer = "";
+for (var k = 0; k < 4; k++) {
+answer += digits[k]; // 變成字串
+}
+}
+
+
+// ====== 按下 Guess 後執行 ======
+function play() {
+var g = document.getElementById("guess").value;
+
+
+// 檢查：是否為 4 位數字
+if (g.length !== 4) {
+alert("必須輸入 4 位數字");
+return;
+}
+if (isNaN(g)) {
+alert("請輸入 0~9 的數字");
+return;
+}
+
+
+// 檢查是否有重複
+for (var i = 0; i < 4; i++) {
+for (var j = i + 1; j < 4; j++) {
+if (g[i] === g[j]) {
+alert("不能輸入重複的數字");
+return;
+}
+}
+}
+
+
+// 計算 A/B
+tries++;
+
+
+var result = checkAB(g, answer);
+
+
+// 顯示紀錄
+var rec = document.getElementById("record");
+var row = document.createElement("div");
+row.textContent = "第 " + tries + " 次： " + g + " → " + result;
+rec.append(row);
+
+
+
+if (result === "4A0B") {
+alert("答對了！總共猜了 " + tries + " 次");
+}
+
+
+document.getElementById("guess").value = "";
+}
+
+function checkAB(g, ans) {
+var A = 0;
+var B = 0;
+
+
+for (var i = 0; i < 4; i++) {
+if (g[i] === ans[i]) {
+A++;
+} else {
+// 手動檢查是否存在於答案中
+for (var j = 0; j < 4; j++) {
+if (g[i] === ans[j]) {
+B++;
+break;
+}
+}
+}
+}
+
+
+return A + "A" + B + "B";
+}
+</script>
+</body>
+</html>
